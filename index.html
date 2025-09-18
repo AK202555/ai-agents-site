@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ИИ-агенты для вашего бизнеса</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: Создана структура интерактивного лендинга с вертикальной прокруткой. План состоит в том, чтобы провести пользователя от общей проблемы к конкретному решению. Структура: 1) Привлекающий внимание главный экран с УТП. 2) Интерактивный раздел "Возможности" с вкладками для изучения функций ИИ-агентов без перегрузки информацией. 3) Раздел "Выгоды", представленный в виде карточек для наглядности. 4) Интерактивный калькулятор окупаемости (ROI), чтобы пользователь мог наглядно увидеть экономию. 5) Пошаговое описание процесса работы для повышения доверия. 6) Финальный призыв к действию. Эта структура выбрана, потому что она логично ведет клиента по воронке продаж, от интереса к конкретным цифрам и действию. -->
+    <!-- Visualization & Content Choices: 1. Возможности ИИ: Отчет -> Цель: Организация информации -> Метод: Интерактивные вкладки -> Взаимодействие: Клик для смены контента. Обоснование: Упрощает восприятие большого объема информации. 2. Выгоды: Отчет -> Цель: Сравнение и информирование -> Метод: Карточки с иконками (Unicode). Обоснование: Визуально разделяет и подчеркивает ключевые преимущества. 3. Экономия: Отчет -> Цель: Убеждение через цифры -> Метод: Калькулятор ROI с диаграммой (Doughnut Chart). Взаимодействие: Пользователь двигает ползунки, видит расчеты и обновление диаграммы. Обоснование: Самый сильный элемент, превращающий абстрактную выгоду в персональный расчет. Библиотека: Chart.js. 4. Процесс работы: Отчет -> Цель: Информирование и построение доверия -> Метод: Визуальная временная шкала. Обоснование: Четко и просто показывает этапы сотрудничества. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f7f4;
+            color: #1f2937;
+        }
+        .tab-active {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background-color: #eff6ff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+
+        <header class="text-center mb-16 md:mb-24">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight mb-4">
+                <span class="text-blue-600">ИИ-агенты</span> для вашего бизнеса
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                Автоматизируйте рутинные задачи, повышайте эффективность и обходите конкурентов с помощью интеллектуальных ассистентов, работающих на вас 24/7.
+            </p>
+            <a href="#cta" class="mt-8 inline-block bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105">
+                Получить консультацию
+            </a>
+        </header>
+
+        <section id="features" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Что могут наши ИИ-агенты?</h2>
+                <p class="mt-2 text-gray-600">Выберите сферу, чтобы увидеть, как ИИ может усилить ваш бизнес.</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8" id="tabs-container">
+                    <button data-tab="sales" class="tab-button tab-active text-sm md:text-base font-medium py-2 px-4 border-b-2 rounded-t-lg transition">📞 Автоматизация продаж</button>
+                    <button data-tab="support" class="tab-button text-sm md:text-base font-medium py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 transition">💬 Клиентская поддержка</button>
+                    <button data-tab="marketing" class="tab-button text-sm md:text-base font-medium py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 transition">📈 Маркетинг и аналитика</button>
+                    <button data-tab="internal" class="tab-button text-sm md:text-base font-medium py-2 px-4 border-b-2 border-transparent text-gray-500 hover:text-blue-600 transition">⚙️ Внутренние процессы</button>
+                </div>
+
+                <div id="tab-content" class="bg-white p-6 md:p-8 rounded-xl shadow-md">
+                    <div id="sales-content" class="tab-panel">
+                        <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Мгновенная обработка входящих заявок с сайта, соцсетей и мессенджеров.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Квалификация лидов для выявления самых "горячих" клиентов.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Автоматическая рассылка персонализированных коммерческих предложений.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Назначение встреч и звонков напрямую в календарь ваших менеджеров.</li>
+                        </ul>
+                    </div>
+                    <div id="support-content" class="tab-panel hidden">
+                        <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Ответы на часто задаваемые вопросы клиентов в режиме реального времени 24/7.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Решение стандартных проблем и консультации по продуктам и услугам.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Снижение нагрузки на операторов поддержки до 80%, позволяя им сфокусироваться на сложных задачах.</li>
+                        </ul>
+                    </div>
+                    <div id="marketing-content" class="tab-panel hidden">
+                         <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Автоматизированный сбор и анализ данных о поведении и предпочтениях клиентов.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Глубокая сегментация аудитории для создания высокоэффективных рекламных кампаний.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Автоматизация email- и мессенджер-рассылок с персонализированным контентом.</li>
+                        </ul>
+                    </div>
+                    <div id="internal-content" class="tab-panel hidden">
+                        <ul class="space-y-4 text-gray-700">
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Автоматизация HR-задач: первичный отбор резюме, онбординг новых сотрудников.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Мгновенная помощь сотрудникам с внутренними базами знаний и регламентами.</li>
+                            <li class="flex items-start"><span class="mr-3 text-blue-500">✓</span> Автоматический сбор отчетов и аналитики по ключевым показателям отделов.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="benefits" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Почему это выгодно для вас?</h2>
+                <p class="mt-2 text-gray-600">Ключевые преимущества, которые получает ваш бизнес.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">💰</div>
+                    <h3 class="font-bold text-xl mb-2">Экономия</h3>
+                    <p class="text-gray-600">Один ИИ-агент заменяет от 2 до 5 сотрудников. Сократите расходы на зарплату, налоги и организацию рабочих мест.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">⚡️</div>
+                    <h3 class="font-bold text-xl mb-2">Скорость</h3>
+                    <p class="text-gray-600">Мгновенная реакция на запросы клиентов. Ни один потенциальный покупатель не останется без внимания и не уйдет к конкурентам.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">🎯</div>
+                    <h3 class="font-bold text-xl mb-2">Эффективность</h3>
+                    <p class="text-gray-600">ИИ не устает, не допускает ошибок и может обрабатывать тысячи запросов одновременно, работая 24/7.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">❤️</div>
+                    <h3 class="font-bold text-xl mb-2">Лояльность клиентов</h3>
+                    <p class="text-gray-600">Быстрые и точные ответы повышают удовлетворенность и доверие к вашей компании, формируя базу постоянных клиентов.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">🔗</div>
+                    <h3 class="font-bold text-xl mb-2">Простая интеграция</h3>
+                    <p class="text-gray-600">Легко подключаем ИИ-агентов к вашим CRM-системам, сайтам, Telegram, WhatsApp, VK и другим платформам.</p>
+                </div>
+                 <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow">
+                    <div class="text-3xl mb-4">📈</div>
+                    <h3 class="font-bold text-xl mb-2">Рост прибыли</h3>
+                    <p class="text-gray-600">За счет увеличения скорости обработки заявок и повышения конверсии, ваш бизнес начинает зарабатывать больше.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="calculator" class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mb-16 md:mb-24">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl md:text-4xl font-bold">Рассчитайте вашу экономию</h2>
+                <p class="mt-2 text-gray-600">Узнайте, сколько вы можете сэкономить, автоматизировав рутинные задачи. Передвиньте ползунки, чтобы увидеть результат.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-center">
+                <div>
+                    <div class="mb-6">
+                        <label for="employees" class="block font-medium mb-2">Количество сотрудников на рутинных задачах: <span id="employeesValue" class="font-bold text-blue-600">3</span></label>
+                        <input id="employees" type="range" min="1" max="20" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div>
+                        <label for="salary" class="block font-medium mb-2">Средняя зарплата одного сотрудника (руб.): <span id="salaryValue" class="font-bold text-blue-600">60 000</span></label>
+                        <input id="salary" type="range" min="30000" max="200000" step="5000" value="60000" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="mt-8 pt-6 border-t">
+                        <p class="text-lg">Расходы на сотрудников в месяц: <strong id="employeeCost" class="text-red-500 text-xl">180 000 руб.</strong></p>
+                        <p class="text-lg mt-2">Стоимость ИИ-агента в месяц: <strong id="aiCost" class="text-green-500 text-xl">30 000 руб.</strong></p>
+                        <p class="text-2xl font-bold mt-4">Ваша экономия в месяц: <strong id="monthlySavings" class="text-blue-600">150 000 руб.</strong></p>
+                        <p class="text-2xl font-bold mt-2">Экономия в год: <strong id="yearlySavings" class="text-blue-600">1 800 000 руб.</strong></p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="savingsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="process" class="mb-16 md:mb-24">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold">Как мы работаем</h2>
+                <p class="mt-2 text-gray-600">Простой и прозрачный процесс внедрения.</p>
+            </div>
+            <div class="max-w-3xl mx-auto">
+                <div class="relative pl-8 border-l-2 border-blue-200">
+                    <div class="mb-10">
+                        <div class="absolute w-6 h-6 bg-blue-600 rounded-full -left-3 border-4 border-white"></div>
+                        <h3 class="font-bold text-xl mb-1">1. Бесплатная консультация</h3>
+                        <p class="text-gray-600">Анализируем ваши задачи, бизнес-процессы и предлагаем оптимальное решение, которое принесет максимальную пользу.</p>
+                    </div>
+                    <div class="mb-10">
+                        <div class="absolute w-6 h-6 bg-blue-600 rounded-full -left-3 border-4 border-white"></div>
+                        <h3 class="font-bold text-xl mb-1">2. Разработка и настройка</h3>
+                        <p class="text-gray-600">Создаем и обучаем ИИ-агента под специфику вашего бизнеса, используя ваши базы знаний и скрипты.</p>
+                    </div>
+                    <div class="mb-10">
+                        <div class="absolute w-6 h-6 bg-blue-600 rounded-full -left-3 border-4 border-white"></div>
+                        <h3 class="font-bold text-xl mb-1">3. Интеграция</h3>
+                        <p class="text-gray-600">Бесшовно внедряем агента в вашу IT-инфраструктуру: CRM, мессенджеры, сайт и другие системы.</p>
+                    </div>
+                    <div>
+                        <div class="absolute w-6 h-6 bg-blue-600 rounded-full -left-3 border-4 border-white"></div>
+                        <h3 class="font-bold text-xl mb-1">4. Поддержка и развитие</h3>
+                        <p class="text-gray-600">Обеспечиваем стабильную работу, следим за показателями и при необходимости дорабатываем функционал.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="cta" class="bg-blue-600 text-white rounded-2xl shadow-lg text-center p-8 md:p-12">
+            <h2 class="text-3xl md:text-4xl font-bold">Хватит терять время и деньги на рутину!</h2>
+            <p class="mt-4 text-lg max-w-2xl mx-auto text-blue-100">
+                Сделайте шаг к полной автоматизации. Свяжитесь с нами прямо сейчас, чтобы получить бесплатную консультацию и персональный расчет стоимости для вашего проекта.
+            </p>
+            <a href="mailto:example@email.com" class="mt-8 inline-block bg-white text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 transition-transform transform hover:scale-105">
+                Написать нам
+            </a>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsContainer = document.getElementById('tabs-container');
+            const tabContent = document.getElementById('tab-content');
+            const tabButtons = tabsContainer.querySelectorAll('.tab-button');
+            const tabPanels = tabContent.querySelectorAll('.tab-panel');
+
+            tabsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('tab-button')) {
+                    const tabName = e.target.dataset.tab;
+
+                    tabButtons.forEach(button => {
+                        button.classList.remove('tab-active');
+                    });
+                    e.target.classList.add('tab-active');
+
+                    tabPanels.forEach(panel => {
+                        if (panel.id === `${tabName}-content`) {
+                            panel.classList.remove('hidden');
+                        } else {
+                            panel.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+            
+            const employeesInput = document.getElementById('employees');
+            const salaryInput = document.getElementById('salary');
+            const employeesValue = document.getElementById('employeesValue');
+            const salaryValue = document.getElementById('salaryValue');
+            const employeeCostEl = document.getElementById('employeeCost');
+            const aiCostEl = document.getElementById('aiCost');
+            const monthlySavingsEl = document.getElementById('monthlySavings');
+            const yearlySavingsEl = document.getElementById('yearlySavings');
+
+            const aiAgentCost = 30000;
+            aiCostEl.textContent = `${aiAgentCost.toLocaleString('ru-RU')} руб.`;
+            
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            let savingsChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Расходы на сотрудников', 'Стоимость ИИ-агента'],
+                    datasets: [{
+                        data: [180000, aiAgentCost],
+                        backgroundColor: ['#ef4444', '#22c55e'],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB' }).format(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            function updateCalculator() {
+                const numEmployees = parseInt(employeesInput.value);
+                const avgSalary = parseInt(salaryInput.value);
+                
+                employeesValue.textContent = numEmployees;
+                salaryValue.textContent = avgSalary.toLocaleString('ru-RU');
+
+                const totalEmployeeCost = numEmployees * avgSalary;
+                const monthlySavings = totalEmployeeCost - aiAgentCost;
+                const yearlySavings = monthlySavings * 12;
+
+                employeeCostEl.textContent = `${totalEmployeeCost.toLocaleString('ru-RU')} руб.`;
+                monthlySavingsEl.textContent = `${monthlySavings > 0 ? monthlySavings.toLocaleString('ru-RU') : 0} руб.`;
+                yearlySavingsEl.textContent = `${yearlySavings > 0 ? yearlySavings.toLocaleString('ru-RU') : 0} руб.`;
+                
+                savingsChart.data.datasets[0].data[0] = totalEmployeeCost;
+                savingsChart.update();
+            }
+
+            employeesInput.addEventListener('input', updateCalculator);
+            salaryInput.addEventListener('input', updateCalculator);
+            
+            updateCalculator();
+        });
+    </script>
+</body>
+</html>
